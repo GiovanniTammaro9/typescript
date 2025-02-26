@@ -16,6 +16,18 @@ function addTodo(title: string): TODO {
   return newTodo;
 }
 
+// Funzione per ottenere un riepilogo di un TODO (tupla con titolo e stato di completamento)
+function getTodoSummary(todoId: number): [string, boolean] | null {
+  const todo = todos.find(todo => todo.id === todoId); // Trova il TODO per ID
+
+  if (todo) {
+    return [todo.title, todo.completed]; // Restituisce una tupla [titolo, stato]
+  } else {
+    console.log(`Todo with ID ${todoId} not found`);
+    return null; // Se non trovato, restituisce null
+  }
+}
+
 // Funzione per aggiungere un nuovo utente
 function addUser(name: string, email?: string): User {
   const newUser: User = {
@@ -58,7 +70,7 @@ function assignTodoToUser(todoId: number, userId: number): void {
 function getUserTodos(userId: number): readonly TODO[] {
   const user = users.find(user => user.id === userId);
   if (user) {
-    return user.todos; // Restituisce l'array di TODO dell'utente
+    return user.todos; // Restituisce l'array di TODO dell'utente senza modificarlo
   } else {
     console.log(`User not found`);
     return [];
@@ -86,6 +98,7 @@ addUser("John Doe", "john.doe@example.com"); // Crea un nuovo utente
 addTodo("Learn TypeScript");
 addTodo("Complete Project");
 
+// Assegna i TODO all'utente
 assignTodoToUser(todos[0].id, users[0].id); // Assegna il primo TODO all'utente appena creato
 assignTodoToUser(todos[1].id, users[0].id); // Assegna il secondo TODO all'utente appena creato
 
@@ -98,5 +111,12 @@ console.log("User Todos:", userTodos);
 // Esempio di utilizzo della funzione parseInput
 const parsedInput = parseInput("Some string");
 console.log("Parsed Input:", parsedInput);
- // Mostra l'array todosWithMetadata con i TODO con metadata
+
+// Esempio di utilizzo della funzione getTodoSummary
+const summary = getTodoSummary(todos[0].id); // Passa l'ID del primo TODO
+if (summary) {
+  console.log(`Todo Summary:`, summary); // Stampa la tupla [titolo, stato]
+} else {
+  console.log(`No summary found for the todo.`);
+}
 
