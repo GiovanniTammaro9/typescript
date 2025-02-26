@@ -24,4 +24,11 @@ export interface TODO {
     InProgress = "in_progress",
     Completed = "completed"
   };
+
+ export interface Project {
+    id: number;
+    name: string;
+    users: User[]; // Lista di utenti associati al progetto
+    todos: TODO[]; // Lista di TODO associati al progetto
+  }
   

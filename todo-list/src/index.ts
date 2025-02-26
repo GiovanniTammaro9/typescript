@@ -1,10 +1,11 @@
-import { TODO, TodoStatus, User } from './types';
+import { TODO, TodoStatus } from "./types";
+import { User } from "./User"; // Importa la classe User dal file user.ts
 
-const todos: TODO[] = []; // Array di TODO vuoto
-const users: User[] = []; // Array di utenti (opzionale)
-const projects: Project[] = []; // Array di progetti
+// Array di TODO, utenti e progetti
+const todos: TODO[] = [];
+const users: User[] = [];
+const projects: Project[] = [];
 
-// Interfaccia per il progetto
 interface Project {
   id: number;
   name: string;
@@ -26,41 +27,28 @@ function addTodo(title: string, status: TodoStatus = TodoStatus.Pending): TODO {
   return newTodo;
 }
 
+// Funzione per aggiornare lo stato di un TODO
 function updateTodoStatus(todoId: number, status: TodoStatus): void {
   const todo = todos.find(todo => todo.id === todoId);
   
   if (todo) {
-    todo.status = status; // Aggiorna lo stato del TODO
+    todo.status = status;
     console.log(`Updated TODO ID ${todoId} to status: ${status}`);
   } else {
     console.log(`Todo with ID ${todoId} not found`);
   }
 }
 
-// Funzione per aggiungere un nuovo utente
-function addUser(name: string, email?: string): User {
-  const newUser: User = {
-    id: Date.now(),
-    name,
-    email,
-    todos: [], // Inizialmente l'utente ha un array vuoto di TODO
-  };
-
-  users.push(newUser);
-  console.log(`Added user:`, newUser);
-  return newUser;
-}
-
 // Funzione per creare un nuovo progetto
 function createProject(name: string, projectUsers: User[], projectTodos: TODO[]): Project {
   const newProject: Project = {
-    id: Date.now(), // Genera un ID univoco
+    id: Date.now(),
     name,
-    users: projectUsers, // Assegna gli utenti al progetto
-    todos: projectTodos, // Assegna i TODO al progetto
+    users: projectUsers,
+    todos: projectTodos,
   };
 
-  projects.push(newProject); // Aggiunge il nuovo progetto all'array globale
+  projects.push(newProject);
   console.log(`Created new project:`, newProject);
   return newProject;
 }
@@ -70,30 +58,25 @@ function assignTodoToUser(todoId: number, userId: number): void {
   const todo = todos.find(todo => todo.id === todoId);
   const user = users.find(user => user.id === userId);
 
-  if (todo && user) {
-    // Ricreiamo l'array `todos` dell'utente con il nuovo TODO
-    const updatedUser: User = {
-      ...user,
-      todos: [...user.todos, todo] // Aggiungiamo il TODO all'array immutabile
-    };
+  if(todo && user) {
+    user.addTodo(todo);
+    console.log(`Assigned TODO to user:`, user);
 
-    // Rimpiazziamo l'utente esistente con il nuovo utente aggiornato
-    const index = users.findIndex(u => u.id === userId);
-    if (index !== -1) {
-      users[index] = updatedUser;
-    }
-
-    console.log(`Assigned TODO to user:`, updatedUser);
-  } else {
-    console.log(`Todo or User not found`);
+  }else {
+    console.log("Todo or User not found");
   }
+
 }
+
+ 
+
+ 
 
 // Funzione per ottenere tutti i TODO di un utente specifico
 function getUserTodos(userId: number): readonly TODO[] {
   const user = users.find(user => user.id === userId);
   if (user) {
-    return user.todos; // Restituisce l'array di TODO dell'utente senza modificarlo
+    return user.todos; // Restituisce l'array di TODO dell'utente
   } else {
     console.log(`User not found`);
     return [];
@@ -105,38 +88,47 @@ function throwError(msg: string): never {
   throw new Error(msg);
 }
 
-// Funzione per analizzare l'input di tipo unknown
+// Funzione per analizzare un input di tipo unknown
 function parseInput(input: unknown): string {
   if (typeof input === 'string') {
-    return input; // Restituisce la stringa così com'è
+    return input;
   } else if (typeof input === 'number') {
-    return String(input); // Converte il numero in una stringa
+    return String(input);
   } else {
-    throwError("Invalid input type. Expected a string or number."); // Lancia errore se l'input non è una stringa o un numero
+    throwError("Invalid input type. Expected a string or number.");
   }
 }
 
-// Aggiungere un nuovo TODO
-addUser("John Doe", "john.doe@example.com"); // Crea un nuovo utente
-addTodo("Learn TypeScript");
-addTodo("Complete Project");
+// Creare utenti
+const user1 = new User(1, "John Doe", "john.doe@example.com");
+const user2 = new User(2, "Jane Smith", "jane.smith@example.com");
 
-// Assegna i TODO all'utente
-assignTodoToUser(todos[0].id, users[0].id); // Assegna il primo TODO all'utente appena creato
-assignTodoToUser(todos[1].id, users[0].id); // Assegna il secondo TODO all'utente appena creato
-updateTodoStatus(todos[0].id, TodoStatus.Completed);
+// Aggiungere TODO agli utenti utilizzando il metodo addTodo della classe User
+const todo1 = addTodo("Learn TypeScript");
+const todo2 = addTodo("Complete Project");
 
-console.log("Users with their Todos:", users); // Mostra l'array degli utenti con i TODO assegnati
+// Usare il metodo addTodo della classe User per aggiungere i TODO agli utenti
+user1.addTodo(todo1);
+user2.addTodo(todo2);
 
-// Creare un nuovo progetto con utenti e TODO
-const project = createProject("TypeScript Project", users, todos);
-console.log("Created Project:", project); // Mostra il progetto creato
+// Aggiungere gli utenti all'array users
+users.push(user1, user2);
 
-// Esempio di utilizzo della funzione getUserTodos
-const userTodos = getUserTodos(users[0].id);
+// Mostrare gli utenti con i loro TODO
+console.log("Users with their Todos:", users);
+
+// Aggiornare lo stato di un TODO
+updateTodoStatus(todo1.id, TodoStatus.Completed);
+
+// Creazione di un progetto con utenti e TODO
+const project = createProject("TypeScript Project", [user1, user2], [todo1, todo2]);
+console.log("Created Project:", project);
+
+// Utilizzo della funzione getUserTodos
+const userTodos = getUserTodos(user1.id);
 console.log("User Todos:", userTodos);
 
-// Esempio di utilizzo della funzione parseInput
+// Utilizzo della funzione parseInput
 const parsedInput = parseInput("Some string");
 console.log("Parsed Input:", parsedInput);
 
