@@ -2,6 +2,7 @@ export interface TODO {
     id: number;
     title: string;
     completed: boolean;
+    status: TodoStatus;
     userId?: number;
     metadata?: string | object; // Proprietà opzionale metadata
   };
@@ -16,5 +17,11 @@ export interface TODO {
     name: string;
     email?: string; // Proprietà opzionale
     readonly todos: readonly TODO[];
+  };
+
+  export enum TodoStatus {
+    Pending = "pending",
+    InProgress = "in_progress",
+    Completed = "completed"
   };
   

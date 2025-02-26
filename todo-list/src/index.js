@@ -20,15 +20,18 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var types_1 = require("./types");
 var todos = []; // Array di TODO vuoto
 var users = []; // Array di utenti (opzionale)
 var projects = []; // Array di progetti
 // Funzione per aggiungere un nuovo TODO
-function addTodo(title) {
+function addTodo(title, status) {
+    if (status === void 0) { status = types_1.TodoStatus.Pending; }
     var newTodo = {
         id: Date.now(), // Genera un ID univoco
         title: title,
         completed: false,
+        status: status,
     };
     todos.push(newTodo); // Aggiunge il nuovo TODO all'array globale
     console.log("Added TODO:", newTodo);

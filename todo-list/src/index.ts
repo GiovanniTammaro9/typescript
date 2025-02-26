@@ -1,4 +1,4 @@
-import { TODO, User } from './types';
+import { TODO, TodoStatus, User } from './types';
 
 const todos: TODO[] = []; // Array di TODO vuoto
 const users: User[] = []; // Array di utenti (opzionale)
@@ -13,11 +13,12 @@ interface Project {
 }
 
 // Funzione per aggiungere un nuovo TODO
-function addTodo(title: string): TODO {
+function addTodo(title: string, status: TodoStatus = TodoStatus.Pending): TODO {
   const newTodo: TODO = {
     id: Date.now(), // Genera un ID univoco
     title,
     completed: false,
+    status,
   };
 
   todos.push(newTodo); // Aggiunge il nuovo TODO all'array globale
