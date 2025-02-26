@@ -1,29 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var todos = []; // Array di TODO vuoto
-var users = []; // Array di utenti (opzionale)
+const todos = []; // Array di TODO vuoto
+const users = []; // Array di utenti (opzionale)
 function addTodo(title) {
-    var newTodo = {
+    const newTodo = {
         id: Date.now(), // Genera un ID univoco
-        title: title,
+        title,
         completed: false,
+        metadata: false,
     };
     todos.push(newTodo); // Aggiunge il nuovo TODO all'array
-    console.log("Added TODO:", newTodo);
+    console.log(`Added TODO:`, newTodo);
 }
 function assignTodoToUser(todoId, userId) {
-    var todo = todos.find(function (todo) { return todo.id === todoId; });
+    const todo = todos.find(todo => todo.id === todoId);
     if (todo) {
         todo.userId = userId;
-        console.log("Assigned user ".concat(userId, " to TODO with ID ").concat(todoId));
+        console.log(`Assigned user ${userId} to TODO with ID ${todoId}`);
     }
     else {
-        console.log("Todo with ID ".concat(todoId, " not found"));
+        console.log(`Todo with ID ${todoId} not found`);
     }
 }
 // Funzione per ottenere tutti i TODO di un utente specifico
 function getUserTodos(userId) {
-    var userTodos = todos.filter(function (todo) { return todo.userId === userId; });
+    const userTodos = todos.filter(todo => todo.userId === userId);
     return userTodos;
 }
 // Funzione per lanciare un errore con un messaggio
@@ -44,14 +45,14 @@ function parseInput(input) {
 }
 // Esempio di utilizzo della funzione parseInput
 try {
-    var result1 = parseInput("Hello, World!");
+    const result1 = parseInput("Hello, World!");
     console.log(result1); // "Hello, World!"
-    var result2 = parseInput(42);
+    const result2 = parseInput(42);
     console.log(result2); // "42"
     // Questo causerà un errore
-    var result3 = parseInput(true);
+    const result3 = parseInput(true);
     console.log(result3);
 }
 catch (error) {
-    console.error(error.message); // Mostra il messaggio dell'errore
+    //console.error(error.message); // Mostra il messaggio dell'errore
 }

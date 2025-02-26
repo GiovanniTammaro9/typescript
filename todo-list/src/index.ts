@@ -3,11 +3,12 @@ import { TODO, User } from './types';
 const todos: TODO[] = []; // Array di TODO vuoto
 const users: User[] = []; // Array di utenti (opzionale)
 
-function addTodo(title: string): void {
+function addTodo(title: string, metadata?: any): void {
   const newTodo: TODO = {
     id: Date.now(), // Genera un ID univoco
     title,
     completed: false,
+    metadata, // Aggiungi metadata, che può essere undefined se non fornito
   };
   
   todos.push(newTodo); // Aggiunge il nuovo TODO all'array
@@ -47,18 +48,10 @@ function parseInput(input: unknown): string {
   }
 }
 
-// Esempio di utilizzo della funzione parseInput
-try {
-  const result1 = parseInput("Hello, World!");
-  console.log(result1); // "Hello, World!"
-  
-  const result2 = parseInput(42);
-  console.log(result2); // "42"
-  
-  // Questo causerà un errore
-  const result3 = parseInput(true);
-  console.log(result3);
-} catch (error) {
-  console.error(error.message); // Mostra il messaggio dell'errore
-}
+// Esempio di utilizzo
+addTodo("Learn TypeScript", { priority: "high", tags: ["typescript", "learning"] });
+addTodo("Practice coding"); // Senza metadata
+
+console.log(todos); // Mostra l'array todos con i TODO aggiunti
+// Mostra l'array todos con i TODO aggiunti
 
