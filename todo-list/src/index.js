@@ -1,52 +1,59 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const todos = []; // Array di TODO vuoto
-const todosWithMetadata = []; // Array di TodoWithMetadata vuoto
-const users = []; // Array di utenti (opzionale)
+var todos = []; // Array di TODO vuoto
+var todosWithMetadata = []; // Array di TodoWithMetadata vuoto
+var users = []; // Array di utenti (opzionale)
 function addTodo(title, metadata) {
-    const newTodo = {
+    var newTodo = {
         id: Date.now(), // Genera un ID univoco
-        title,
+        title: title,
         completed: false,
-        metadata, // Aggiungi metadata, che può essere una stringa, un oggetto o undefined
+        metadata: metadata,
     };
     todos.push(newTodo); // Aggiunge il nuovo TODO all'array
-    console.log(`Added TODO:`, newTodo);
+    console.log("Added TODO:", newTodo);
 }
-;
 function addTodoWithMetadata(title, metadata) {
-    const newTodo = {
+    var newTodo = {
         id: Date.now(), // Genera un ID univoco
-        title,
+        title: title,
         completed: false,
-        metadata, // Aggiungi metadata
+        metadata: metadata,
     };
     todosWithMetadata.push(newTodo); // Aggiunge il nuovo TODO con metadata all'array
-    console.log(`Added TODO with Metadata:`, newTodo);
+    console.log("Added TODO with Metadata:", newTodo);
 }
-;
-function assignTodoToUser(todoId, userId) {
-    const todo = todos.find(todo => todo.id === todoId);
+// Funzione per aggiornare parzialmente un TODO usando Partial<TODO>
+function updateTodo(todoId, updatedFields) {
+    var todo = todos.find(function (todo) { return todo.id === todoId; });
     if (todo) {
-        todo.userId = userId;
-        console.log(`Assigned user ${userId} to TODO with ID ${todoId}`);
+        // Aggiorna solo le proprietà che sono state passate
+        Object.assign(todo, updatedFields);
+        console.log("Updated TODO:", todo);
     }
     else {
-        console.log(`Todo with ID ${todoId} not found`);
+        console.log("Todo with ID ".concat(todoId, " not found"));
     }
 }
-;
+function assignTodoToUser(todoId, userId) {
+    var todo = todos.find(function (todo) { return todo.id === todoId; });
+    if (todo) {
+        todo.userId = userId;
+        console.log("Assigned user ".concat(userId, " to TODO with ID ").concat(todoId));
+    }
+    else {
+        console.log("Todo with ID ".concat(todoId, " not found"));
+    }
+}
 // Funzione per ottenere tutti i TODO di un utente specifico
 function getUserTodos(userId) {
-    const userTodos = todos.filter(todo => todo.userId === userId);
+    var userTodos = todos.filter(function (todo) { return todo.userId === userId; });
     return userTodos;
 }
-;
 // Funzione per lanciare un errore con un messaggio
 function throwError(msg) {
     throw new Error(msg);
 }
-;
 // Funzione per analizzare l'input di tipo unknown
 function parseInput(input) {
     if (typeof input === 'string') {
@@ -59,10 +66,12 @@ function parseInput(input) {
         throwError("Invalid input type. Expected a string or number."); // Lancia errore se l'input non è una stringa o un numero
     }
 }
-;
 // Esempio di utilizzo
-addTodo("Learn TypeScript", { priority: "high", tags: ["typescript", "learning"] }); // Con oggetto come metadata
-addTodo("Practice coding", "This is a practice todo"); // Con stringa come metadata
-addTodo("Master TypeScript"); // Senza metadata
+addTodo("Learn TypeScript", { priority: "high", tags: ["typescript", "learning"] });
+addTodo("Practice coding"); // Senza metadata
+addTodo("Master TypeScript");
 console.log(todos); // Mostra l'array todos con i TODO aggiunti
-console.log(todosWithMetadata); // Mostra l'array todosWithMetadata con i TODO con metadata
+// Esempio di aggiornamento di un TODO
+updateTodo(todos[0].id, { completed: true, title: "Learn TypeScript - Updated" }); // Solo il TODO con ID 0 verrà aggiornato
+console.log(todos); // Mostra l'array todos dopo l'aggiornamento
+; // Mostra l'array todosWithMetadata con i TODO con metadata
