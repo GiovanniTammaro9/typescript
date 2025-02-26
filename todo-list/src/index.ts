@@ -1,7 +1,7 @@
-
-import { TODO } from './types';
+import { TODO, User } from './types';
 
 const todos: TODO[] = []; // Array di TODO vuoto
+const users: User[] = []; // Array di utenti (opzionale)
 
 function addTodo(title: string): void {
   const newTodo: TODO = {
@@ -9,13 +9,33 @@ function addTodo(title: string): void {
     title,
     completed: false,
   };
-
+  
   todos.push(newTodo); // Aggiunge il nuovo TODO all'array
   console.log(`Added TODO:`, newTodo);
+}
+
+function assignTodoToUser(todoId: number, userId: number): void {
+  // Trova il TODO con l'ID corrispondente
+  const todo = todos.find(todo => todo.id === todoId);
+  
+  if (todo) {
+    // Assegna l'utente al TODO
+    todo.userId = userId;
+    console.log(`Assigned user ${userId} to TODO with ID ${todoId}`);
+  } else {
+    console.log(`Todo with ID ${todoId} not found`);
+  }
 }
 
 // Esempio di utilizzo
 addTodo("Learn TypeScript");
 addTodo("Practice coding");
 
-console.log(todos); // Mostra tutti i TODO nell'array
+
+const user1: User = { id: 1, name: "John Doe", email: "john.doe@example.com" };
+users.push(user1);
+
+// Assegniamo un TODO all'utente con ID 1
+assignTodoToUser(todos[0].id, user1.id);
+
+console.log(todos); // Mostra l'array todos con l'utente assegnato
