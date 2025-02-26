@@ -1,16 +1,21 @@
 
-
-import { TODO } from './types'; 
+import { TODO } from './types';
 
 const todos: TODO[] = []; // Array di TODO vuoto
 
+function addTodo(title: string): void {
+  const newTodo: TODO = {
+    id: Date.now(), // Genera un ID univoco
+    title,
+    completed: false,
+  };
 
-const todo: TODO = {
-  id: 1,
-  title: 'Learn TypeScript',
-  completed: false
-};
+  todos.push(newTodo); // Aggiunge il nuovo TODO all'array
+  console.log(`Added TODO:`, newTodo);
+}
 
-todos.push(todo); 
+// Esempio di utilizzo
+addTodo("Learn TypeScript");
+addTodo("Practice coding");
 
-console.log(todos); // Stampa l'array todos con il nuovo TODO
+console.log(todos); // Mostra tutti i TODO nell'array
