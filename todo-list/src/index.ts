@@ -2,6 +2,15 @@ import { TODO, User } from './types';
 
 const todos: TODO[] = []; // Array di TODO vuoto
 const users: User[] = []; // Array di utenti (opzionale)
+const projects: Project[] = []; // Array di progetti
+
+// Interfaccia per il progetto
+interface Project {
+  id: number;
+  name: string;
+  users: User[]; // Lista di utenti associati al progetto
+  todos: TODO[]; // Lista di TODO associati al progetto
+}
 
 // Funzione per aggiungere un nuovo TODO
 function addTodo(title: string): TODO {
@@ -16,18 +25,6 @@ function addTodo(title: string): TODO {
   return newTodo;
 }
 
-// Funzione per ottenere un riepilogo di un TODO (tupla con titolo e stato di completamento)
-function getTodoSummary(todoId: number): [string, boolean] | null {
-  const todo = todos.find(todo => todo.id === todoId); // Trova il TODO per ID
-
-  if (todo) {
-    return [todo.title, todo.completed]; // Restituisce una tupla [titolo, stato]
-  } else {
-    console.log(`Todo with ID ${todoId} not found`);
-    return null; // Se non trovato, restituisce null
-  }
-}
-
 // Funzione per aggiungere un nuovo utente
 function addUser(name: string, email?: string): User {
   const newUser: User = {
@@ -40,6 +37,20 @@ function addUser(name: string, email?: string): User {
   users.push(newUser);
   console.log(`Added user:`, newUser);
   return newUser;
+}
+
+// Funzione per creare un nuovo progetto
+function createProject(name: string, projectUsers: User[], projectTodos: TODO[]): Project {
+  const newProject: Project = {
+    id: Date.now(), // Genera un ID univoco
+    name,
+    users: projectUsers, // Assegna gli utenti al progetto
+    todos: projectTodos, // Assegna i TODO al progetto
+  };
+
+  projects.push(newProject); // Aggiunge il nuovo progetto all'array globale
+  console.log(`Created new project:`, newProject);
+  return newProject;
 }
 
 // Funzione per assegnare un TODO a un utente
@@ -104,6 +115,10 @@ assignTodoToUser(todos[1].id, users[0].id); // Assegna il secondo TODO all'utent
 
 console.log("Users with their Todos:", users); // Mostra l'array degli utenti con i TODO assegnati
 
+// Creare un nuovo progetto con utenti e TODO
+const project = createProject("TypeScript Project", users, todos);
+console.log("Created Project:", project); // Mostra il progetto creato
+
 // Esempio di utilizzo della funzione getUserTodos
 const userTodos = getUserTodos(users[0].id);
 console.log("User Todos:", userTodos);
@@ -111,12 +126,4 @@ console.log("User Todos:", userTodos);
 // Esempio di utilizzo della funzione parseInput
 const parsedInput = parseInput("Some string");
 console.log("Parsed Input:", parsedInput);
-
-// Esempio di utilizzo della funzione getTodoSummary
-const summary = getTodoSummary(todos[0].id); // Passa l'ID del primo TODO
-if (summary) {
-  console.log(`Todo Summary:`, summary); // Stampa la tupla [titolo, stato]
-} else {
-  console.log(`No summary found for the todo.`);
-}
 
