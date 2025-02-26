@@ -26,6 +26,17 @@ function addTodo(title: string, status: TodoStatus = TodoStatus.Pending): TODO {
   return newTodo;
 }
 
+function updateTodoStatus(todoId: number, status: TodoStatus): void {
+  const todo = todos.find(todo => todo.id === todoId);
+  
+  if (todo) {
+    todo.status = status; // Aggiorna lo stato del TODO
+    console.log(`Updated TODO ID ${todoId} to status: ${status}`);
+  } else {
+    console.log(`Todo with ID ${todoId} not found`);
+  }
+}
+
 // Funzione per aggiungere un nuovo utente
 function addUser(name: string, email?: string): User {
   const newUser: User = {
@@ -113,6 +124,7 @@ addTodo("Complete Project");
 // Assegna i TODO all'utente
 assignTodoToUser(todos[0].id, users[0].id); // Assegna il primo TODO all'utente appena creato
 assignTodoToUser(todos[1].id, users[0].id); // Assegna il secondo TODO all'utente appena creato
+updateTodoStatus(todos[0].id, TodoStatus.Completed);
 
 console.log("Users with their Todos:", users); // Mostra l'array degli utenti con i TODO assegnati
 

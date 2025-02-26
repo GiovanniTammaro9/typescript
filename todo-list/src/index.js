@@ -37,6 +37,16 @@ function addTodo(title, status) {
     console.log("Added TODO:", newTodo);
     return newTodo;
 }
+function updateTodoStatus(todoId, status) {
+    var todo = todos.find(function (todo) { return todo.id === todoId; });
+    if (todo) {
+        todo.status = status; // Aggiorna lo stato del TODO
+        console.log("Updated TODO ID ".concat(todoId, " to status: ").concat(status));
+    }
+    else {
+        console.log("Todo with ID ".concat(todoId, " not found"));
+    }
+}
 // Funzione per aggiungere un nuovo utente
 function addUser(name, email) {
     var newUser = {
@@ -113,6 +123,7 @@ addTodo("Complete Project");
 // Assegna i TODO all'utente
 assignTodoToUser(todos[0].id, users[0].id); // Assegna il primo TODO all'utente appena creato
 assignTodoToUser(todos[1].id, users[0].id); // Assegna il secondo TODO all'utente appena creato
+updateTodoStatus(todos[0].id, types_1.TodoStatus.Completed);
 console.log("Users with their Todos:", users); // Mostra l'array degli utenti con i TODO assegnati
 // Creare un nuovo progetto con utenti e TODO
 var project = createProject("TypeScript Project", users, todos);
