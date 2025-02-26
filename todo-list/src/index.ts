@@ -13,6 +13,8 @@ interface Project {
   todos: TODO[]; // Lista di TODO associati al progetto
 }
 
+
+
 // Funzione per aggiungere un nuovo TODO
 function addTodo(title: string, status: TodoStatus = TodoStatus.Pending): TODO {
   const newTodo: TODO = {
