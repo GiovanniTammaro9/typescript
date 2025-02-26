@@ -1,17 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const todos = []; // Array di TODO vuoto
+const todosWithMetadata = []; // Array di TodoWithMetadata vuoto
 const users = []; // Array di utenti (opzionale)
-function addTodo(title) {
+function addTodo(title, metadata) {
     const newTodo = {
         id: Date.now(), // Genera un ID univoco
         title,
         completed: false,
-        metadata: false,
+        metadata, // Aggiungi metadata, che può essere una stringa, un oggetto o undefined
     };
     todos.push(newTodo); // Aggiunge il nuovo TODO all'array
     console.log(`Added TODO:`, newTodo);
 }
+;
+function addTodoWithMetadata(title, metadata) {
+    const newTodo = {
+        id: Date.now(), // Genera un ID univoco
+        title,
+        completed: false,
+        metadata, // Aggiungi metadata
+    };
+    todosWithMetadata.push(newTodo); // Aggiunge il nuovo TODO con metadata all'array
+    console.log(`Added TODO with Metadata:`, newTodo);
+}
+;
 function assignTodoToUser(todoId, userId) {
     const todo = todos.find(todo => todo.id === todoId);
     if (todo) {
@@ -22,15 +35,18 @@ function assignTodoToUser(todoId, userId) {
         console.log(`Todo with ID ${todoId} not found`);
     }
 }
+;
 // Funzione per ottenere tutti i TODO di un utente specifico
 function getUserTodos(userId) {
     const userTodos = todos.filter(todo => todo.userId === userId);
     return userTodos;
 }
+;
 // Funzione per lanciare un errore con un messaggio
 function throwError(msg) {
     throw new Error(msg);
 }
+;
 // Funzione per analizzare l'input di tipo unknown
 function parseInput(input) {
     if (typeof input === 'string') {
@@ -43,16 +59,10 @@ function parseInput(input) {
         throwError("Invalid input type. Expected a string or number."); // Lancia errore se l'input non è una stringa o un numero
     }
 }
-// Esempio di utilizzo della funzione parseInput
-try {
-    const result1 = parseInput("Hello, World!");
-    console.log(result1); // "Hello, World!"
-    const result2 = parseInput(42);
-    console.log(result2); // "42"
-    // Questo causerà un errore
-    const result3 = parseInput(true);
-    console.log(result3);
-}
-catch (error) {
-    //console.error(error.message); // Mostra il messaggio dell'errore
-}
+;
+// Esempio di utilizzo
+addTodo("Learn TypeScript", { priority: "high", tags: ["typescript", "learning"] }); // Con oggetto come metadata
+addTodo("Practice coding", "This is a practice todo"); // Con stringa come metadata
+addTodo("Master TypeScript"); // Senza metadata
+console.log(todos); // Mostra l'array todos con i TODO aggiunti
+console.log(todosWithMetadata); // Mostra l'array todosWithMetadata con i TODO con metadata

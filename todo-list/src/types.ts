@@ -3,12 +3,17 @@ export interface TODO {
     title: string;
     completed: boolean;
     userId?: number;
-    metadata?: any;
-}
-
-export interface User {
-    id: number;        // id dell'utente
-    name: string;      // nome dell'utente
-    email?: string;    // email dell'utente (opzionale)
-  }
+    metadata?: string | object; // Proprietà opzionale metadata
+  };
+  
+  // Interfaccia TodoWithMetadata che estende TODO
+  export interface TodoWithMetadata extends TODO {
+    metadata: any; // La proprietà metadata è obbligatoria in TodoWithMetadata
+  };
+  
+  export interface User {
+    id: number;
+    name: string;
+    email?: string; // Proprietà opzionale
+  };
   
