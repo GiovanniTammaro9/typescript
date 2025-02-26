@@ -27,35 +27,38 @@ function assignTodoToUser(todoId: number, userId: number): void {
 
 // Funzione per ottenere tutti i TODO di un utente specifico
 function getUserTodos(userId: number): TODO[] {
-  // Filtra tutti i TODO che hanno l'userId uguale al parametro passato
   const userTodos = todos.filter(todo => todo.userId === userId);
   return userTodos;
 }
 
-// Esempio di utilizzo
-addTodo("Learn TypeScript");
-addTodo("Practice coding");
-
-// Creiamo un esempio di utente
-const user1: User = { id: 1, name: "John Doe", email: "john.doe@example.com" };
-users.push(user1);
-
-// Assegniamo un TODO all'utente con ID 1
-assignTodoToUser(todos[0].id, user1.id);
-assignTodoToUser(todos[1].id, user1.id);
-
-// Recuperiamo tutti i TODO assegnati all'utente con ID 1
-const user1Todos = getUserTodos(user1.id);
-console.log("Todos assigned to user 1:", user1Todos);
- // Mostra l'array todos con l'utente assegnato
-
- function throwError(msg: string): never {
+// Funzione per lanciare un errore con un messaggio
+function throwError(msg: string): never {
   throw new Error(msg);
 }
 
-// Esempio di utilizzo della funzione throwError
+// Funzione per analizzare l'input di tipo unknown
+function parseInput(input: unknown): string {
+  if (typeof input === 'string') {
+    return input; // Restituisce la stringa così com'è
+  } else if (typeof input === 'number') {
+    return String(input); // Converte il numero in una stringa
+  } else {
+    throwError("Invalid input type. Expected a string or number."); // Lancia errore se l'input non è una stringa o un numero
+  }
+}
+
+// Esempio di utilizzo della funzione parseInput
 try {
-  throwError("Something went wrong!");
+  const result1 = parseInput("Hello, World!");
+  console.log(result1); // "Hello, World!"
+  
+  const result2 = parseInput(42);
+  console.log(result2); // "42"
+  
+  // Questo causerà un errore
+  const result3 = parseInput(true);
+  console.log(result3);
 } catch (error) {
   console.error(error.message); // Mostra il messaggio dell'errore
 }
+
