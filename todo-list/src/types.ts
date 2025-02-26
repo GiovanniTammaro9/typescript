@@ -15,5 +15,6 @@ export interface TODO {
     id: number;
     name: string;
     email?: string; // Proprietà opzionale
+    readonly todos: readonly TODO[];
   };
   

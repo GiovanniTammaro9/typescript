@@ -1,61 +1,68 @@
-import { TODO, TodoWithMetadata, User } from './types';
+import { TODO, User } from './types';
 
 const todos: TODO[] = []; // Array di TODO vuoto
-const todosWithMetadata: TodoWithMetadata[] = []; // Array di TodoWithMetadata vuoto
 const users: User[] = []; // Array di utenti (opzionale)
 
-function addTodo(title: string, metadata?: string | object): void {
+// Funzione per aggiungere un nuovo TODO
+function addTodo(title: string): TODO {
   const newTodo: TODO = {
     id: Date.now(), // Genera un ID univoco
     title,
     completed: false,
-    metadata, // Aggiungi metadata, che può essere una stringa, un oggetto o undefined
   };
 
-  todos.push(newTodo); // Aggiunge il nuovo TODO all'array
+  todos.push(newTodo); // Aggiunge il nuovo TODO all'array globale
   console.log(`Added TODO:`, newTodo);
+  return newTodo;
 }
 
-function addTodoWithMetadata(title: string, metadata: any): void {
-  const newTodo: TodoWithMetadata = {
-    id: Date.now(), // Genera un ID univoco
-    title,
-    completed: false,
-    metadata, // Aggiungi metadata
+// Funzione per aggiungere un nuovo utente
+function addUser(name: string, email?: string): User {
+  const newUser: User = {
+    id: Date.now(),
+    name,
+    email,
+    todos: [], // Inizialmente l'utente ha un array vuoto di TODO
   };
 
-  todosWithMetadata.push(newTodo); // Aggiunge il nuovo TODO con metadata all'array
-  console.log(`Added TODO with Metadata:`, newTodo);
+  users.push(newUser);
+  console.log(`Added user:`, newUser);
+  return newUser;
 }
 
-// Funzione per aggiornare parzialmente un TODO usando Partial<TODO>
-function updateTodo(todoId: number, updatedFields: Partial<TODO>): void {
-  const todo = todos.find(todo => todo.id === todoId);
-
-  if (todo) {
-    // Aggiorna solo le proprietà che sono state passate
-    Object.assign(todo, updatedFields);
-    console.log(`Updated TODO:`, todo);
-  } else {
-    console.log(`Todo with ID ${todoId} not found`);
-  }
-}
-
+// Funzione per assegnare un TODO a un utente
 function assignTodoToUser(todoId: number, userId: number): void {
   const todo = todos.find(todo => todo.id === todoId);
+  const user = users.find(user => user.id === userId);
 
-  if (todo) {
-    todo.userId = userId;
-    console.log(`Assigned user ${userId} to TODO with ID ${todoId}`);
+  if (todo && user) {
+    // Ricreiamo l'array `todos` dell'utente con il nuovo TODO
+    const updatedUser: User = {
+      ...user,
+      todos: [...user.todos, todo] // Aggiungiamo il TODO all'array immutabile
+    };
+
+    // Rimpiazziamo l'utente esistente con il nuovo utente aggiornato
+    const index = users.findIndex(u => u.id === userId);
+    if (index !== -1) {
+      users[index] = updatedUser;
+    }
+
+    console.log(`Assigned TODO to user:`, updatedUser);
   } else {
-    console.log(`Todo with ID ${todoId} not found`);
+    console.log(`Todo or User not found`);
   }
 }
 
 // Funzione per ottenere tutti i TODO di un utente specifico
-function getUserTodos(userId: number): TODO[] {
-  const userTodos = todos.filter(todo => todo.userId === userId);
-  return userTodos;
+function getUserTodos(userId: number): readonly TODO[] {
+  const user = users.find(user => user.id === userId);
+  if (user) {
+    return user.todos; // Restituisce l'array di TODO dell'utente
+  } else {
+    console.log(`User not found`);
+    return [];
+  }
 }
 
 // Funzione per lanciare un errore con un messaggio
@@ -74,16 +81,22 @@ function parseInput(input: unknown): string {
   }
 }
 
-// Esempio di utilizzo
-addTodo("Learn TypeScript", { priority: "high", tags: ["typescript", "learning"] });
-addTodo("Practice coding"); // Senza metadata
-addTodo("Master TypeScript");
+// Aggiungere un nuovo TODO
+addUser("John Doe", "john.doe@example.com"); // Crea un nuovo utente
+addTodo("Learn TypeScript");
+addTodo("Complete Project");
 
-console.log(todos); // Mostra l'array todos con i TODO aggiunti
+assignTodoToUser(todos[0].id, users[0].id); // Assegna il primo TODO all'utente appena creato
+assignTodoToUser(todos[1].id, users[0].id); // Assegna il secondo TODO all'utente appena creato
 
-// Esempio di aggiornamento di un TODO
-updateTodo(todos[0].id, { completed: true, title: "Learn TypeScript - Updated" }); // Solo il TODO con ID 0 verrà aggiornato
+console.log("Users with their Todos:", users); // Mostra l'array degli utenti con i TODO assegnati
 
-console.log(todos); // Mostra l'array todos dopo l'aggiornamento
-;  // Mostra l'array todosWithMetadata con i TODO con metadata
+// Esempio di utilizzo della funzione getUserTodos
+const userTodos = getUserTodos(users[0].id);
+console.log("User Todos:", userTodos);
+
+// Esempio di utilizzo della funzione parseInput
+const parsedInput = parseInput("Some string");
+console.log("Parsed Input:", parsedInput);
+ // Mostra l'array todosWithMetadata con i TODO con metadata
 
